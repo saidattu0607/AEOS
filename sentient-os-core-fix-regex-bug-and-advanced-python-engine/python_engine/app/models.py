@@ -8,13 +8,16 @@ class AgentRequest(BaseModel):
 
 class AgentResponse(BaseModel):
     response: str
+    division: str = "AEOS Core"
     tool_usage: List[Dict[str, Any]] = []
+    collaboration_log: List[str] = []
     sentiment: str = "neutral"
     cost_incurred: float = 0.0
 
 class MasumiAgentConfig(BaseModel):
     name: str
     did: str
+    division: str
     capabilities: List[str]
     price_per_request: float = 0.0
     wallet_address: str

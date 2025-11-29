@@ -1,141 +1,140 @@
-import { Activity, Shield, Brain, Lock, Zap, Users } from "lucide-react";
+import { Globe, Building2, Banknote, HeartHandshake, ShieldCheck, Activity } from "lucide-react";
 import { useState } from "react";
 import { useAIAgent } from "@/hooks/useAIAgent";
 import { useToast } from "@/hooks/use-toast";
 
-interface Agent {
+interface Division {
   id: string;
   name: string;
   status: "active" | "idle" | "processing";
   icon: React.ReactNode;
   description: string;
+  capabilities: string[];
 }
 
 export const AgentStatus = () => {
   const { processCommand, isProcessing } = useAIAgent();
   const { toast } = useToast();
-  const [activeAgent, setActiveAgent] = useState<string | null>(null);
+  const [activeDivision, setActiveDivision] = useState<string | null>(null);
 
-  const agents: Agent[] = [
+  const divisions: Division[] = [
     {
-      id: "aegis",
-      name: "Aegis Agent",
+      id: "eid",
+      name: "EID: Earth Intelligence",
       status: "active",
-      icon: <Shield className="h-5 w-5" />,
-      description: "Crisis Response & Security",
+      icon: <Globe className="h-6 w-6" />,
+      description: "Planetary monitoring, weather analysis, IoT grid, disaster prediction.",
+      capabilities: ["Satellite Uplink", "Disaster Forecast", "Energy Grid Opt", "Agri-Drone Swarm"]
     },
     {
-      id: "sentinel",
-      name: "Sentinel Agent",
+      id: "enid",
+      name: "ENID: Enterprise Intelligence",
       status: "active",
-      icon: <Activity className="h-5 w-5" />,
-      description: "Cyber-Defense & Threat Intel",
+      icon: <Building2 className="h-6 w-6" />,
+      description: "Business automation, marketing, compliance, data insights.",
+      capabilities: ["Workflow Auto", "Marketing GenAI", "Compliance/KYC", "Audit Logging"]
     },
     {
-      id: "veritas",
-      name: "Veritas Agent",
-      status: "idle",
-      icon: <Brain className="h-5 w-5" />,
-      description: "Truth & Identity Engine",
-    },
-    {
-      id: "payment",
-      name: "DID Payment Agent",
+      id: "dtad",
+      name: "DTAD: DeFi & Transactions",
       status: "processing",
-      icon: <Lock className="h-5 w-5" />,
-      description: "Secure Transactions",
+      icon: <Banknote className="h-6 w-6" />,
+      description: "Financial brain, yield optimization, insurance, payments.",
+      capabilities: ["Yield Optimize", "Smart Treasury", "Risk Scoring", "Instant Pay"]
     },
     {
-      id: "defi",
-      name: "DeFi Agent",
+      id: "hid",
+      name: "HID: Human Interaction",
       status: "active",
-      icon: <Zap className="h-5 w-5" />,
-      description: "Financial Operations",
-    },
-    {
-      id: "compliance",
-      name: "Compliance Agent",
-      status: "idle",
-      icon: <Users className="h-5 w-5" />,
-      description: "Risk Management",
+      icon: <HeartHandshake className="h-6 w-6" />,
+      description: "Support, personalization, user journey, recommendations.",
+      capabilities: ["24/7 Support", "Personalization", "Ticket Auto-Resolve", "Voice Interface"]
     },
   ];
 
-  const handleAgentClick = async (agent: Agent) => {
-    setActiveAgent(agent.id);
+  const handleDivisionClick = async (div: Division) => {
+    setActiveDivision(div.id);
     
-    const contextMessage = `Provide a status report for ${agent.name}. Include current tasks, system health, and any alerts.`;
+    const contextMessage = `Run diagnostics for ${div.name}. Report on active nodes and recent collaboration events.`;
     
+    // Using 'AEOS Core' as the routing agent/division for status checks
     const response = await processCommand(
-      "Generate status report",
-      agent.id,
+      `Status Report for ${div.id.toUpperCase()}`,
+      "AEOS Core",
       contextMessage
     );
 
     if (response) {
       toast({
-        title: `${agent.name} Report`,
+        title: `${div.name} Status`,
         description: response.response,
         duration: 5000,
       });
     }
     
-    setActiveAgent(null);
+    setActiveDivision(null);
   };
 
-  const getStatusColor = (status: Agent["status"]) => {
+  const getStatusColor = (status: Division["status"]) => {
     switch (status) {
       case "active":
-        return "text-success";
+        return "text-cyan-400";
       case "processing":
-        return "text-warning animate-pulse";
+        return "text-yellow-400 animate-pulse";
       case "idle":
-        return "text-muted-foreground";
+        return "text-gray-500";
     }
   };
 
-  const getStatusBg = (status: Agent["status"]) => {
+  const getStatusBg = (status: Division["status"]) => {
     switch (status) {
       case "active":
-        return "bg-success/10 border-success/30";
+        return "bg-cyan-500/10 border-cyan-500/30";
       case "processing":
-        return "bg-warning/10 border-warning/30";
+        return "bg-yellow-500/10 border-yellow-500/30";
       case "idle":
-        return "bg-muted/10 border-border/30";
+        return "bg-gray-500/10 border-gray-500/30";
     }
   };
 
   return (
-    <div className="glass-card p-6 rounded-2xl">
-      <h2 className="text-xl font-semibold text-foreground mb-4">Multi-Agent Intelligence</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {agents.map((agent) => (
-          <button
-            key={agent.id}
-            onClick={() => handleAgentClick(agent)}
-            disabled={isProcessing && activeAgent === agent.id}
-            className={`p-4 rounded-xl border ${getStatusBg(agent.status)} transition-all hover:scale-105 hover:border-primary/50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-              activeAgent === agent.id ? 'animate-pulse-glow' : ''
-            }`}
-          >
-            <div className="flex items-start justify-between mb-2">
-              <div className={`p-2 rounded-lg bg-background/50 ${getStatusColor(agent.status)}`}>
-                {agent.icon}
-              </div>
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${getStatusColor(agent.status)} ${
-                  agent.status === "active" ? "animate-pulse-glow" : ""
-                }`} />
-                <span className={`text-xs font-medium ${getStatusColor(agent.status)} uppercase`}>
-                  {activeAgent === agent.id ? 'querying' : agent.status}
-                </span>
-              </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+      {divisions.map((div) => (
+        <button
+          key={div.id}
+          onClick={() => handleDivisionClick(div)}
+          disabled={isProcessing && activeDivision === div.id}
+          className={`relative group p-4 rounded-xl border ${getStatusBg(div.status)} transition-all duration-300 hover:scale-[1.02] hover:bg-white/5 cursor-pointer disabled:opacity-50 text-left`}
+        >
+          {/* Status Indicator */}
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${div.status === "active" ? "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" : "bg-yellow-400"} animate-pulse`} />
+            <span className={`text-[10px] font-mono tracking-widest ${getStatusColor(div.status)} uppercase`}>
+              {activeDivision === div.id ? 'SCANNING...' : div.status}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4 mb-3">
+            <div className={`p-3 rounded-lg bg-black/40 border border-white/10 ${getStatusColor(div.status)} group-hover:scale-110 transition-transform`}>
+              {div.icon}
             </div>
-            <h3 className="font-semibold text-foreground text-left">{agent.name}</h3>
-            <p className="text-sm text-muted-foreground mt-1 text-left">{agent.description}</p>
-          </button>
-        ))}
-      </div>
+            <div>
+              <h3 className="font-bold text-white text-lg tracking-tight">{div.name}</h3>
+              <p className="text-xs text-gray-400 font-mono">ID: {div.id.toUpperCase()}-001</p>
+            </div>
+          </div>
+
+          <p className="text-sm text-gray-300 mb-4 line-clamp-2">{div.description}</p>
+
+          <div className="flex flex-wrap gap-2">
+            {div.capabilities.map((cap) => (
+              <span key={cap} className="px-2 py-1 text-[10px] rounded bg-white/5 border border-white/10 text-gray-400 font-mono">
+                {cap}
+              </span>
+            ))}
+          </div>
+        </button>
+      ))}
     </div>
   );
 };

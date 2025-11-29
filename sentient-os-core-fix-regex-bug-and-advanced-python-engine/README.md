@@ -1,73 +1,68 @@
-# Welcome to your Lovable project
+# AEOS – Autonomous Earth Operating System
 
-## Project info
+**A Planet-Scale Multi-Agent Intelligence Built on the Masumi Network**
 
-**URL**: https://lovable.dev/projects/46b59257-209e-4fbe-9e2b-29343be79252
+AEOS is a revolutionary "Operating System" for the planet, powered by AI agents that live on the Masumi Network (Cardano). It is designed to automate, optimize, and protect both Earth-scale systems (like weather monitoring and disaster response) and Enterprise-scale systems (like marketing, compliance, and finance).
 
-## How can I edit this code?
+![AEOS Interface](https://via.placeholder.com/800x400?text=AEOS+Interface+Preview)
 
-There are several ways of editing your application.
+## 🌍 The Vision
 
-**Use Lovable**
+AEOS is not just a chatbot; it's a **self-managing economy of agents**.
+*   **The Orchestrator**: A master AI that understands intent and delegates tasks.
+*   **The Divisions**: 4 specialized teams of agents (EID, ENID, DTAD, HID).
+*   **The Network**: Agents collaborate, hire each other, and settle payments on-chain via Masumi.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/46b59257-209e-4fbe-9e2b-29343be79252) and start prompting.
+## 🧠 The 4 Intelligence Divisions
 
-Changes made via Lovable will be committed automatically to this repo.
+1.  **Earth Intelligence Division (EID)**
+    *   *Focus*: Planetary health, weather, satellites, IoT, disaster prediction.
+    *   *Key Feature*: Can trigger financial aid (via DTAD) instantly upon detecting a flood.
 
-**Use your preferred IDE**
+2.  **Enterprise Intelligence Division (ENID)**
+    *   *Focus*: Business automation, marketing, compliance, workflow.
+    *   *Key Feature*: Runs autonomous marketing campaigns and ensures on-chain KYC/AML.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+3.  **DeFi & Transaction Division (DTAD)**
+    *   *Focus*: Finance, payments, insurance, yield optimization.
+    *   *Key Feature*: The "Bank" of the OS, managing treasury and settlements for other agents.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+4.  **Human Interaction Division (HID)**
+    *   *Focus*: Support, personalization, voice interface, recommendations.
+    *   *Key Feature*: The "Face" of the OS, translating complex data into human-friendly insights.
 
-Follow these steps:
+## 🚀 Key Technical Features
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+*   **Multi-Agent Orchestration**: A central Python-based logic engine that routes tasks and manages complex workflows.
+*   **Masumi Network Integration**: Agents have DIDs (Decentralized IDs) and wallets to transact on Cardano.
+*   **Browser-Based NLP**: Uses Transformers.js for privacy-preserving, local intent classification and entity extraction.
+*   **Voice Interface**: Hands-free command and control system.
+*   **Real-Time Analytics**: Dashboard monitoring neural accuracy, network load, and agent status.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🛠 Project Structure
 
-# Step 3: Install the necessary dependencies.
-npm i
+*   `src/`: React/Vite frontend with Tailwind CSS and Shadcn UI.
+    *   `components/`: UI components for Agent Status, Voice Command, Analytics.
+    *   `utils/nlpProcessor.ts`: Local NLP logic (Hugging Face).
+*   `python_engine/`: The "Brain" of AEOS.
+    *   `app/agent.py`: The Master Orchestrator logic.
+    *   `app/divisions.py`: Implementation of the 4 Intelligence Divisions.
+*   `supabase/`: Edge functions for serverless scaling.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 📦 Getting Started
 
-**Edit a file directly in GitHub**
+1.  **Clone the Repo**
+2.  **Install Dependencies**: `npm install`
+3.  **Run Development Server**: `npm run dev`
+4.  **Interact**: Use the Voice Command interface to say "Check flood risk and prepare funds" to see multi-agent collaboration in action.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🏆 Hackathon Value Proposition
 
-**Use GitHub Codespaces**
+AEOS demonstrates the future of AI on Blockchain:
+*   **Monetizable Agents**: Every service is a transaction.
+*   **Trustless Collaboration**: Code is law, settlements are on-chain.
+*   **Real-World Impact**: Combining Earth data with DeFi rails for instant disaster relief.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/46b59257-209e-4fbe-9e2b-29343be79252) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+**Powered by Masumi Network & Lovable AI**

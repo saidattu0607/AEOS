@@ -37,29 +37,24 @@ export const analyzeSentiment = async (text: string) => {
 export const classifyIntent = (text: string): string => {
   const lowerText = text.toLowerCase();
   
-  // Transaction intents
-  if (lowerText.includes('send') || lowerText.includes('transfer') || lowerText.includes('pay')) {
-    return 'transaction';
+  // EID Intents
+  if (lowerText.includes('weather') || lowerText.includes('climate') || lowerText.includes('disaster') || lowerText.includes('satellite') || lowerText.includes('flood')) {
+    return 'eid';
+  }
+
+  // ENID Intents
+  if (lowerText.includes('marketing') || lowerText.includes('compliance') || lowerText.includes('audit') || lowerText.includes('workflow') || lowerText.includes('kyc')) {
+    return 'enid';
+  }
+
+  // DTAD Intents
+  if (lowerText.includes('send') || lowerText.includes('pay') || lowerText.includes('yield') || lowerText.includes('stake') || lowerText.includes('insurance') || lowerText.includes('loan')) {
+    return 'dtad';
   }
   
-  // Deployment intents
-  if (lowerText.includes('deploy') || lowerText.includes('contract') || lowerText.includes('smart contract')) {
-    return 'deployment';
-  }
-  
-  // Query intents
-  if (lowerText.includes('check') || lowerText.includes('status') || lowerText.includes('balance')) {
-    return 'query';
-  }
-  
-  // Security intents
-  if (lowerText.includes('security') || lowerText.includes('threat') || lowerText.includes('protect')) {
-    return 'security';
-  }
-  
-  // DeFi intents
-  if (lowerText.includes('stake') || lowerText.includes('yield') || lowerText.includes('liquidity')) {
-    return 'defi';
+  // HID Intents
+  if (lowerText.includes('support') || lowerText.includes('help') || lowerText.includes('ticket') || lowerText.includes('recommend') || lowerText.includes('contact')) {
+    return 'hid';
   }
   
   return 'general';
@@ -91,13 +86,12 @@ export const extractEntities = (text: string) => {
 
 export const routeToAgent = (intent: string): string => {
   const agentRouting: Record<string, string> = {
-    transaction: 'payment',
-    deployment: 'aegis',
-    query: 'sentinel',
-    security: 'sentinel',
-    defi: 'defi',
-    general: 'general'
+    eid: 'Earth Intelligence',
+    enid: 'Enterprise Intelligence',
+    dtad: 'DeFi & Transaction',
+    hid: 'Human Interaction',
+    general: 'AEOS Core'
   };
   
-  return agentRouting[intent] || 'general';
+  return agentRouting[intent] || 'AEOS Core';
 };

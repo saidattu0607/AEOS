@@ -17,11 +17,12 @@ async def root():
 @app.get("/config")
 async def get_agent_config():
     return MasumiAgentConfig(
-        name="Veritas-X",
-        did="did:masumi:agent:veritas-x-99",
-        capabilities=["DeFi", "Compliance", "Analysis"],
-        price_per_request=0.005,
-        wallet_address="addr1_masumi_agent_vault"
+        name="AEOS Orchestrator",
+        did="did:masumi:agent:orchestrator-001",
+        division="Core",
+        capabilities=["Orchestration", "DeFi", "Compliance", "Earth Intelligence", "Human Interaction"],
+        price_per_request=0.01,
+        wallet_address="addr1_aeos_orchestrator_vault"
     )
 
 @app.post("/interact", response_model=AgentResponse)
