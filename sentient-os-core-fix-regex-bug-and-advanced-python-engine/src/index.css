@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* AEOS - Futuristic AI OS Theme */
+    --background: 220 25% 6%;
+    --foreground: 180 100% 95%;
+
+    --card: 220 20% 10%;
+    --card-foreground: 180 100% 95%;
+
+    --popover: 220 22% 8%;
+    --popover-foreground: 180 100% 95%;
+
+    --primary: 185 95% 55%;
+    --primary-foreground: 220 25% 6%;
+
+    --secondary: 270 80% 60%;
+    --secondary-foreground: 180 100% 95%;
+
+    --muted: 220 15% 20%;
+    --muted-foreground: 180 30% 70%;
+
+    --accent: 185 95% 55%;
+    --accent-foreground: 220 25% 6%;
+
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 180 100% 95%;
+
+    --success: 150 80% 50%;
+    --success-foreground: 220 25% 6%;
+
+    --warning: 40 95% 60%;
+    --warning-foreground: 220 25% 6%;
+
+    --border: 220 20% 18%;
+    --input: 220 20% 15%;
+    --ring: 185 95% 55%;
+
+    --radius: 0.75rem;
+
+    /* Holographic effects */
+    --glow-cyan: 185 95% 55%;
+    --glow-purple: 270 80% 60%;
+    --glow-blue: 210 100% 60%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(185 95% 55% / 0.8), hsl(210 100% 60% / 0.8));
+    --gradient-secondary: linear-gradient(135deg, hsl(270 80% 60% / 0.6), hsl(185 95% 55% / 0.6));
+    --gradient-holographic: linear-gradient(135deg, hsl(185 95% 55% / 0.2), hsl(270 80% 60% / 0.2));
+
+    /* Shadows and glows */
+    --shadow-glow-cyan: 0 0 40px hsl(185 95% 55% / 0.3), 0 0 80px hsl(185 95% 55% / 0.2);
+    --shadow-glow-purple: 0 0 40px hsl(270 80% 60% / 0.3), 0 0 80px hsl(270 80% 60% / 0.2);
+    --shadow-card: 0 8px 32px hsl(220 25% 3% / 0.4);
+
+    /* Glass morphism */
+    --glass-bg: hsl(220 20% 12% / 0.4);
+    --glass-border: hsl(185 95% 55% / 0.1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background: radial-gradient(ellipse at top, hsl(220 30% 10%), hsl(220 25% 6%));
+    min-height: 100vh;
+  }
+}
+
+/* Custom animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--glow-cyan) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(var(--glow-cyan) / 0.5);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-card);
+}
+
+.glow-cyan {
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.glow-purple {
+  box-shadow: var(--shadow-glow-purple);
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}

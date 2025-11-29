@@ -1,0 +1,7 @@
+project_id = "akgyowklmebrfwxpftmg"
+
+[functions.ai-agent]
+verify_jwt = false
+
+[functions.voice-transcribe]
+verify_jwt = false
