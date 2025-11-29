@@ -6,3 +6,4 @@ langchain-community
 langchain-core
 python-multipart
 requests
+textblob

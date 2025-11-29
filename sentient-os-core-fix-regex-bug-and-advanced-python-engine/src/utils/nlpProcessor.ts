@@ -1,18 +1,34 @@
-import { pipeline } from "@huggingface/transformers";
+import { pipeline, env } from "@huggingface/transformers";
+
+// Skip local model checks for browser environment
+env.allowLocalModels = false;
+env.useBrowserCache = true;
 
 let sentimentAnalyzer: any = null;
-let embeddingModel: any = null;
+let zeroShotClassifier: any = null;
 
 export const initializeNLP = async () => {
   try {
     console.log('Initializing NLP models...');
     
     // Initialize sentiment analysis
-    sentimentAnalyzer = await pipeline(
-      'sentiment-analysis',
-      'Xenova/distilbert-base-uncased-finetuned-sst-2-english',
-      { device: 'wasm' }
-    );
+    if (!sentimentAnalyzer) {
+        sentimentAnalyzer = await pipeline(
+        'sentiment-analysis',
+        'Xenova/distilbert-base-uncased-finetuned-sst-2-english',
+        { device: 'wasm' }
+        );
+    }
+
+    // Initialize Zero-Shot Classification for Intent Detection
+    // Using a lightweight model suitable for browser
+    if (!zeroShotClassifier) {
+        zeroShotClassifier = await pipeline(
+            'zero-shot-classification',
+            'Xenova/mobilebert-uncased-mnli',
+            { device: 'wasm' }
+        );
+    }
     
     console.log('NLP models initialized successfully');
   } catch (error) {
@@ -34,35 +50,40 @@ export const analyzeSentiment = async (text: string) => {
   }
 };
 
-export const classifyIntent = (text: string): string => {
-  const lowerText = text.toLowerCase();
-  
-  // Transaction intents
-  if (lowerText.includes('send') || lowerText.includes('transfer') || lowerText.includes('pay')) {
-    return 'transaction';
+export const classifyIntent = async (text: string): Promise<string> => {
+  if (!zeroShotClassifier) {
+    await initializeNLP();
   }
-  
-  // Deployment intents
-  if (lowerText.includes('deploy') || lowerText.includes('contract') || lowerText.includes('smart contract')) {
-    return 'deployment';
+
+  const candidateLabels = [
+    'earth environmental monitoring',
+    'business marketing and compliance',
+    'financial defi transaction',
+    'human support and help'
+  ];
+
+  try {
+    const output = await zeroShotClassifier(text, candidateLabels);
+    // output: { sequence:Str, labels:Str[], scores:float[] }
+    // Get the top label
+    const topLabel = output.labels[0];
+
+    // Map full labels to short intent codes
+    if (topLabel === 'earth environmental monitoring') return 'eid';
+    if (topLabel === 'business marketing and compliance') return 'enid';
+    if (topLabel === 'financial defi transaction') return 'dtad';
+    if (topLabel === 'human support and help') return 'hid';
+
+    return 'general';
+  } catch (error) {
+    console.error('Zero-shot classification error:', error);
+    // Fallback to simple keyword matching if model fails
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('weather') || lowerText.includes('crop') || lowerText.includes('satellite')) return 'eid';
+    if (lowerText.includes('marketing') || lowerText.includes('audit') || lowerText.includes('campaign')) return 'enid';
+    if (lowerText.includes('pay') || lowerText.includes('stake') || lowerText.includes('ada')) return 'dtad';
+    return 'hid';
   }
-  
-  // Query intents
-  if (lowerText.includes('check') || lowerText.includes('status') || lowerText.includes('balance')) {
-    return 'query';
-  }
-  
-  // Security intents
-  if (lowerText.includes('security') || lowerText.includes('threat') || lowerText.includes('protect')) {
-    return 'security';
-  }
-  
-  // DeFi intents
-  if (lowerText.includes('stake') || lowerText.includes('yield') || lowerText.includes('liquidity')) {
-    return 'defi';
-  }
-  
-  return 'general';
 };
 
 export const extractEntities = (text: string) => {
@@ -85,19 +106,24 @@ export const extractEntities = (text: string) => {
       entities.push({ type: 'address', value: match });
     });
   }
+
+  // Extract Emails
+  const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi;
+  const emailMatches = text.match(emailPattern);
+  if (emailMatches) {
+      emailMatches.forEach(match => {
+          entities.push({ type: 'email', value: match });
+      });
+  }
   
   return entities;
 };
 
 export const routeToAgent = (intent: string): string => {
-  const agentRouting: Record<string, string> = {
-    transaction: 'payment',
-    deployment: 'aegis',
-    query: 'sentinel',
-    security: 'sentinel',
-    defi: 'defi',
-    general: 'general'
-  };
-  
-  return agentRouting[intent] || 'general';
+    // Intent is now directly the agent ID (eid, enid, dtad, hid)
+    const validAgents = ['eid', 'enid', 'dtad', 'hid'];
+    if (validAgents.includes(intent)) {
+        return intent;
+    }
+    return 'hid'; // Default to Human Interaction if unsure
 };
